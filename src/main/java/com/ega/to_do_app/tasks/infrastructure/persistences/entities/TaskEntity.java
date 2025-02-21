@@ -23,6 +23,6 @@ public class TaskEntity {
     private String taskDescription;
     private LocalDate taskStartDate;
     private LocalDate taskDueDate;
-    private boolean finished;
+    private Boolean finished;
 
 }

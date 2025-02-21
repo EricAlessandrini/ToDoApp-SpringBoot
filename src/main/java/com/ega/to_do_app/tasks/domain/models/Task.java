@@ -18,6 +18,6 @@ public class Task {
     public String taskDescription;
     public LocalDate taskStartDate;
     public LocalDate taskDueDate;
-    public boolean finished;
+    public Boolean finished;
 
 }
