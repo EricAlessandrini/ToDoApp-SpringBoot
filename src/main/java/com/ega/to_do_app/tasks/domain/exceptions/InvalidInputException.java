@@ -8,16 +8,16 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class TaskNotFoundException extends RuntimeException{
+public class InvalidInputException extends RuntimeException {
 
     private final String code;
     private final String message;
     private final HttpStatus status;
     private final LocalDateTime timestamp;
 
-    public TaskNotFoundException() {
-        this.code = TaskExceptionCatalog.TASK_NOT_FOUND.getExceptionCode();
-        this.message = TaskExceptionCatalog.TASK_NOT_FOUND.getExceptionMessage();
+    public InvalidInputException() {
+        this.code = TaskExceptionCatalog.INVALID_INPUT_RECEIVED.getExceptionCode();
+        this.message = TaskExceptionCatalog.INVALID_INPUT_RECEIVED.getExceptionMessage();
         this.status = HttpStatus.BAD_REQUEST;
         this.timestamp = LocalDateTime.now();
     }
