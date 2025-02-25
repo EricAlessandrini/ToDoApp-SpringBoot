@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -65,29 +66,29 @@ public class TaskDao implements OutputPort {
         TaskEntity entity = taskRepository.findByTaskName(taskName)
                 .orElseThrow(TaskNotFoundException::new);
 
-        entity.setTaskName(task.getTaskName());
+        updateEntityFields(entity, task);
 
-        if(task.getTaskDescription() != null && !task.getTaskDescription().trim().isEmpty()) {
-            entity.setTaskDescription(task.getTaskDescription());
-        }
+        validateDates(entity);
 
-        if (task.getTaskStartDate() != null && !task.getTaskStartDate().equals(entity.getTaskStartDate())) {
-            entity.setTaskStartDate(task.getTaskStartDate());
-        }
+        taskRepository.save(entity);
+    }
 
-        if (task.getTaskDueDate() != null && !task.getTaskDueDate().equals(entity.getTaskDueDate())) {
-            entity.setTaskDueDate(task.getTaskDueDate());
-        }
+    private void updateEntityFields(TaskEntity entity, Task task) {
+        Optional.ofNullable(task.getTaskName())
+                .filter(name -> !name.trim().isEmpty())
+                .ifPresent(entity::setTaskName);
+        Optional.ofNullable(task.getTaskDescription())
+                .filter(desc -> !desc.trim().isEmpty())
+                .ifPresent(entity::setTaskDescription);
+        Optional.ofNullable(task.getTaskStartDate()).ifPresent(entity::setTaskStartDate);
+        Optional.ofNullable(task.getTaskDueDate()).ifPresent(entity::setTaskDueDate);
+        Optional.ofNullable(task.getFinished()).ifPresent(entity::setFinished);
+    }
 
-        if (task.getFinished() != null && !task.getFinished().equals(entity.getFinished())) {
-            entity.setFinished(task.getFinished());
-        }
-
+    private void validateDates(TaskEntity entity) {
         if (entity.getTaskStartDate().isAfter(entity.getTaskDueDate())) {
             throw new MismatchedDatesException();
         }
-
-        taskRepository.save(entity);
     }
 
     @Override
@@ -97,4 +98,5 @@ public class TaskDao implements OutputPort {
 
         taskRepository.delete(entity);
     }
+
 }
