@@ -51,7 +51,7 @@ public class TaskExceptionHandler {
         );
 
         ExceptionResponseDto response = ExceptionResponseDto.builder()
-                .code(TaskExceptionCatalog.INVALID_INPUT_RECEIVED.getExceptionCode())
+                .code(TaskExceptionCatalog.INVALID_FIELD_DATA.getExceptionCode())
                 .message(TaskExceptionCatalog.INVALID_FIELD_DATA.getExceptionMessage())
                 .details(exceptionDetails)
                 .timestamp(LocalDateTime.now())
